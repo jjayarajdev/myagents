@@ -1,0 +1,211 @@
+Description: |
+  **List of Examples - Do consider the below examples as template and generate the Snowflake query**
+
+Examples:
+  - Example-1:
+      User_Input: |
+         Year on year percentage growth for Industrial/Retail/Office Properties
+      Reasoning: |
+         Do always calculate **MARKETSHARE** as percentage values
+      AI_Response: |
+        WITH YearlySales AS (
+            SELECT
+                EXTRACT(YEAR FROM SALE_DATE) AS Sale_Year,
+                RCA_PROPERTY_TYPE,
+                SUM(MS.TOTALMARKETSHARE) AS Total_Market_Share
+            FROM
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA
+            JOIN
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS
+            ON
+                RCA.PROPERTY_ID = MS.PROPERTY_ID
+            WHERE
+                RCA_PROPERTY_TYPE IN ('Industrial', 'Retail', 'Office')
+            GROUP BY
+                Sale_Year, RCA_PROPERTY_TYPE
+        ),
+        YearlyGrowth AS (
+            SELECT
+                current_year.Sale_Year,
+                current_year.RCA_PROPERTY_TYPE,
+                current_year.Total_Market_Share AS Current_Year_Sales,
+                COALESCE(previous.Total_Market_Share, 0) AS Previous_Year_Sales,
+                CASE
+                    WHEN COALESCE(previous.Total_Market_Share, 0) = 0 THEN NULL
+                    ELSE (current_year.Total_Market_Share - previous.Total_Market_Share) / previous.Total_Market_Share * 100
+                END AS Year_On_Year_Growth_Percentage
+            FROM
+                YearlySales current_year
+            LEFT JOIN
+                YearlySales previous
+            ON
+                current_year.RCA_PROPERTY_TYPE = previous.RCA_PROPERTY_TYPE
+                AND current_year.Sale_Year = previous.Sale_Year + 1
+        ),
+        OverallTotal AS (
+            SELECT
+                SUM(Total_Market_Share) AS Overall_Market_Share
+            FROM
+                YearlySales
+        ),
+        FinalResult AS (
+            SELECT
+                yg.Sale_Year,
+                yg.RCA_PROPERTY_TYPE,
+                yg.Current_Year_Sales,
+                yg.Previous_Year_Sales,
+                yg.Year_On_Year_Growth_Percentage,
+                ROUND((yg.Current_Year_Sales / ot.Overall_Market_Share) * 100, 2) AS Current_Year_Sales_Percentage,
+                ROUND((yg.Previous_Year_Sales / ot.Overall_Market_Share) * 100, 2) AS Previous_Year_Sales_Percentage
+            FROM
+                YearlyGrowth yg
+            CROSS JOIN
+                OverallTotal ot
+        )
+        SELECT
+            Sale_Year,
+            RCA_PROPERTY_TYPE,
+            Current_Year_Sales,
+            Current_Year_Sales_Percentage,
+            Previous_Year_Sales,
+            Previous_Year_Sales_Percentage,
+            Year_On_Year_Growth_Percentage
+        FROM
+            FinalResult
+        ORDER BY
+            Sale_Year,
+            RCA_PROPERTY_TYPE;
+
+  - Example-2:
+      User_Input: |
+        Which countries have the highest total market share in 2024?
+      Reasoning: |
+        **Reasoning**: Do always calculate **MARKETSHARE** as percentage values
+      AI_Response: |
+        WITH TotalMarketShare AS (
+            SELECT
+                SUM(MS.TOTALMARKETSHARE) AS total_market_share
+            FROM
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS
+            JOIN
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA
+                ON RCA.PROPERTY_ID = MS.PROPERTY_ID
+            WHERE
+                EXTRACT(YEAR FROM RCA.SALE_DATE) = 2024
+        )
+        SELECT
+            RCA.COUNTRY_T,
+            SUM(MS.TOTALMARKETSHARE) AS total_market_share,
+            (SUM(MS.TOTALMARKETSHARE) / TMS.total_market_share * 100) AS market_share_percentage
+        FROM
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS
+        JOIN
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA ON MS.PROPERTY_ID = RCA.PROPERTY_ID
+        JOIN
+            TotalMarketShare TMS ON 1=1
+        WHERE
+            EXTRACT(YEAR FROM RCA.SALE_DATE) = 2024
+        GROUP BY
+            RCA.COUNTRY_T, TMS.total_market_share
+        ORDER BY
+            market_share_percentage DESC;
+
+  - Example-3:
+      User_Input: |
+        How has the average transaction size evolved over the past five years for CBRE in the U.S. markets?
+      AI_Response: |
+        WITH AvgTransactionSizes AS (
+            SELECT 
+                AVG(RCA.SALE_PRICE) AS avg_transaction_size,
+                EXTRACT(YEAR FROM RCA.SALE_DATE) AS year
+            FROM 
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA 
+            WHERE 
+                RCA.SALE_DATE >= DATEADD(year, -5, CURRENT_DATE)
+                AND RCA.country_t = 'United States of America'
+                AND RCA.PROPERTY_ID IN ( 
+                    SELECT MS.PROPERTY_ID 
+                    FROM PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS 
+                    WHERE MS.BROKERAGEFIRM = 'CBRE'
+                ) 
+            GROUP BY year
+        )
+        SELECT
+            year,
+            avg_transaction_size,
+            LAG(avg_transaction_size) OVER (ORDER BY year) AS previous_year_size,
+            (avg_transaction_size - LAG(avg_transaction_size) OVER (ORDER BY year)) AS change_in_size,
+            CASE
+                WHEN LAG(avg_transaction_size) OVER (ORDER BY year) IS NOT NULL THEN
+                    (avg_transaction_size - LAG(avg_transaction_size) OVER (ORDER BY year)) / LAG(avg_transaction_size) OVER (ORDER BY year) * 100
+                ELSE
+                    NULL
+            END AS percent_change
+        FROM
+            AvgTransactionSizes
+        ORDER BY
+            year;
+
+  - Example-4:
+      User_Input: |
+        What are CBRE's top 10 highest value deals?
+      Reasoning: |
+        Do always use **SALE_PRICE** as the question is about highest value deals by CBRE
+      AI_Response: |
+        SELECT 
+            RCA.SALE_DATE,
+            RCA.SALE_PRICE,
+            RCA.RCA_PROPERTY_TYPE
+        FROM 
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA 
+        WHERE 
+            RCA.PROPERTY_ID IN ( 
+                SELECT MS.PROPERTY_ID 
+                FROM PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS 
+                WHERE MS.BROKERAGEFIRM = 'CBRE'
+            )
+        ORDER BY
+            RCA.SALE_PRICE DESC
+        LIMIT 10;
+
+  - Example-5:
+      User_Input: |
+        Who are the top Seller brokers in the UK market?
+      Reasoning: |
+        Ensuring the BROKERAGEFIRM column NOT NULL in query generation
+      AI_Response: |
+        SELECT
+            MS.BROKERAGEFIRM,
+            SUM(MS.TOTALMARKETSHARE) AS Total_Market_Share
+        FROM
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA
+        JOIN
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS
+        ON
+            RCA.PROPERTY_ID = MS.PROPERTY_ID
+        WHERE
+            RCA.COUNTRY_T = 'United Kingdom'
+            AND MS.SELLERMARKETSHARE <> 0
+            AND MS.BROKERAGEFIRM IS NOT NULL
+        GROUP BY
+            MS.BROKERAGEFIRM
+        ORDER BY
+            Total_Market_Share DESC
+        LIMIT 10;
+
+  - Example-6:
+      User_Input: |
+        What was the top buyer total sales volume in 2024?
+      AI_Response: |
+        SELECT 
+            RCA.BUYERNAME_1 AS Top_Buyer, 
+            SUM(RCA.SALE_PRICE) AS Total_Sales_Volume 
+        FROM 
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA
+        WHERE 
+            EXTRACT(YEAR FROM RCA.SALE_DATE) = 2024 
+        GROUP BY 
+            RCA.BUYERNAME_1 
+        ORDER BY 
+            Total_Sales_Volume DESC 
+        LIMIT 1;

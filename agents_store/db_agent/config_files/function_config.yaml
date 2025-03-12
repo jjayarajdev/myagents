@@ -1,0 +1,15 @@
+functions:
+  - db_agent:
+      description: |
+        - **db_agent(user_input)**  
+        - Retrieves data from a Snowflake database, including all database-related tasks such as querying past interactions, records, or any other data not explicitly related to Snowflake access.  
+      parameters: |
+        - *Parameters Required:*
+          - `user_input`: The user's input, used to query the database. 
+      output_params:
+        - param-1:
+            value: ai_response
+            data_type: str
+      db_config: snowflake_agent
+    
+ 

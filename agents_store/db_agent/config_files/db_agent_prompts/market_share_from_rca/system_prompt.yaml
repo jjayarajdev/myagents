@@ -1,0 +1,45 @@
+Business_instructions: 
+  - Instruction-1: |
+      ---
+      • Baseline Market Share:
+      - If the user is comparing multiple brokers, you must use the market share columns (e.g., "TOTALMARKETSHARE") from the SIGMA_LOG.MARKET_SHARE_FROM_RCA table.
+        Also known as “Market Share,” “Ranking,” “Percent of Market,” or “Share of Wallet.”
+
+  - Instruction-2: |
+      • Comparison vs. No Comparison:
+      - Without comparison, rely on Sales Volume ("SALE_PRICE").
+      - Once comparing multiple firms, do not double count deals with multiple brokers. Use the Market Share table, as it incorporates rules about splitting the total out among multiple brokers.
+
+  - Instruction-3: |
+      **MARKETSHARE** considerations:
+      - Always provide the MARKETSHARE in percentage value in query generation.
+      - When comparing year over year, calculate overall market share and CBRE market share with the same filters.
+
+  - Instruction-4: |
+     Identification of **BROKERAGEFIRM** Role as Buyer and Seller:
+      With the following columns for a particular PROPERTYID:
+      • BROKERAGEFIRM (the broker’s name)
+      • BUYER_MARKET_SHARE (the total market share as buyer)
+      • SELLER_MARKET_SHARE (the total market share as seller)
+      Determine whether each broker is a “Buyer Broker” or “Seller Broker” for each PROPERTY_ID as follows:
+      • If SELLER_MARKET_SHARE = 0, classify the **BROKERAGEFIRM** as “BUYER BROKER”.
+      • If BUYER_MARKET_SHARE = 0, classify the **BROKERAGEFIRM** as “SELLER BROKER”.
+
+  - Instruction-5: |
+     **Key Operations:**
+      - Identify properties associated with the brokerage firm first like 'CBRE' from the MARKET_SHARE_FROM_RCA table and do the Operations.
+  - Instruction-6: |
+      **Country_considerations**:
+      - USA : Unites States of America
+      - UK : United Kingdom
+      - UAE : United Arab Emirates
+Notes: 
+  - special_notes: |
+      - **Avoid Self-Reference**: Do not reference an alias at the same level of the query where it is defined. Instead, use the original column name. This prevents errors related to undefined identifiers.
+
+  - additional_notes: |
+      - **Database and Table Reference**: Queries are to be run on the **PROD_SIGMA_LOG_FILE_DB** database and the **RCA_WITH_CBRE_GEOS** table, using the **SIGMA_LOG** schema.
+      - **Consistent Formatting**: Ensure that all references to columns and tables are consistently and correctly formatted according to Snowflake syntax and best practices.
+      - **Previous Year Filter**: Include the previous year filter when the time period is not mentioned in the user query (e.g., `EXTRACT(YEAR FROM SALE_DATE) = EXTRACT(YEAR FROM CURRENT_DATE) - 1`).
+
+      ---

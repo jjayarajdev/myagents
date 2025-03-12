@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "8ebdb6d8-f9c4-46a7-9c12-47776990a097",
+		"name": "conversations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41571524"
+	},
+	"item": [
+		{
+			"name": "New Chat",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_input\": \"whats the CBRE market share in US market in 2024\",\r\n    \"func_name\": \"newchat\",\r\n    \"user_details\": {\r\n        \"country\": \"India\",\r\n        \"country_code\": \"IN\",\r\n        \"market\": \"None\",\r\n        \"sector\": \"ALL\",\r\n        \"user_id\": \"8\",\r\n        \"user_mail\": \"sree18@cbre.com\",\r\n        \"user_name\": \"Vandith, Pragallapati \"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/ask-ellis",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ask-ellis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chat Conversation",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_input\": \"whats the CBRE market share in US market in 2024?\",\r\n    \"func_name\": \"chatconversation\",\r\n    \"thread_id\": \"e4e9cc71-e79a-469f-a540-586c91c1aaa2\",\r\n    \"user_details\": {\r\n        \"country\": \"India\",\r\n        \"country_code\": \"IN\",\r\n        \"market\": \"None\",\r\n        \"sector\": \"ALL\",\r\n        \"user_id\": \"8\",\r\n        \"user_mail\": \"vandith@cbre.com\",\r\n        \"user_name\": \"Vandith, Pragallapati \"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/ask-ellis",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ask-ellis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Chat History",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"conversation_history\": [],\r\n    \"func_name\": \"retrieveconversation\",\r\n    \"thread_id\": \"e4e9cc71-e79a-469f-a540-586c91c1aaa2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/conv-history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"conv-history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chat Feedback",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"conversation_history\": [],\r\n    \"func_name\": \"feedback\",\r\n    \"message_id\":\"de0a20bc-0d1b-4d8a-91b3-f19a601455b6\",\r\n    \"feedback\":\"-1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/conv-history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"conv-history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Chat Sessions",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"conversation_history\": [],\r\n    \"func_name\": \"chathistory\",\r\n    \"user_details\": {\r\n        \"user_mail\": \"sree18@cbre.com\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/conv-history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"conv-history"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

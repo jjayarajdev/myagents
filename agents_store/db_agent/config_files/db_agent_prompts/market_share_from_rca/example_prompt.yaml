@@ -1,0 +1,127 @@
+Description: |
+  **List of Examples - Do consider the below examples as template and generate the Snowflake query**
+
+Examples:
+  - Example-6:
+      User_Input: |
+        Who was the biggest seller in the New York market for the last 5 years represented by Cushman & Wakefield? 
+      Reasoning: |
+         Do always use **SALE_PRICE** as the question is all transactions managed by CBRE
+      AI_Response: |
+        SELECT 
+            SELLERNAME_1,
+            SUM(RCA.SALE_PRICE) 
+        FROM 
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA 
+        WHERE 
+            RCA.MARKET_T = 'New York' 
+            AND RCA.SALE_DATE >= DATEADD(year, -5, CURRENT_DATE) 
+            AND RCA.PROPERTY_ID IN ( 
+                SELECT MS.PROPERTY_ID 
+                FROM PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS 
+                WHERE MS.BROKERAGEFIRM = 'Cushman & Wakefield' 
+                    AND SELLERMARKETSHARE > 0 
+            ) 
+        GROUP BY 
+            SELLERNAME_1
+        ORDER BY 
+            SUM(RCA.SALE_PRICE) DESC; 
+
+  - Example-7:
+      User_Input: |
+        What is the total value of all transactions managed by CBRE in the UK in 2023?
+      Reasoning: |
+        Ensuring the BROKERAGEFIRM column NOT NULL in query generation
+        Do always use **SALE_PRICE** as the question is all transactions managed by CBRE
+      AI_Response: |
+        SELECT 
+            SUM(RCA.SALE_PRICE) 
+        FROM 
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA 
+        WHERE 
+            EXTRACT(YEAR FROM RCA.SALE_DATE) = 2023 
+            AND RCA.COUNTRY_T = 'United Kingdom' 
+            AND RCA.PROPERTY_ID IN ( 
+                SELECT MS.PROPERTY_ID 
+                FROM PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS 
+                WHERE MS.BROKERAGEFIRM = 'CBRE'
+            ); 
+
+  - Example-8:
+      User_Input: |
+        What is the average size of deals done by CBRE in the city of Dallas during 2024?
+      AI_Response: |
+        SELECT 
+            AVG(RCA.SALE_PRICE) AS "avg_price", 
+            AVG(RCA.SALE_SIZE) AS "avg_size", 
+            COUNT(DISTINCT(RCA.PROPERTY_ID)) AS "deal_count" 
+        FROM 
+            PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA 
+        WHERE 
+            EXTRACT(YEAR FROM RCA.SALE_DATE) = 2024 
+            AND RCA.CITY = 'Dallas' 
+            AND RCA.PROPERTY_ID IN ( 
+                SELECT MS.PROPERTY_ID 
+                FROM PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS 
+                WHERE MS.BROKERAGEFIRM = 'CBRE' 
+            ); 
+
+  - Example-9:
+      User_Input: |
+        CBRE’s market share in United Kingdom over the last 3 years?
+      AI_Response: |
+        WITH MarketShareEurope AS (
+            SELECT
+                EXTRACT(YEAR FROM RCA.SALE_DATE) AS "Year",
+                SUM(MS.TOTALMARKETSHARE) AS "Total_Market_Share",
+                SUM(CASE WHEN MS.BROKERAGEFIRM = 'CBRE' THEN MS.TOTALMARKETSHARE END) AS CBRE_Market_Share
+            FROM 
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA
+            JOIN 
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS
+                ON RCA.PROPERTY_ID = MS.PROPERTY_ID
+            WHERE
+                RCA.COUNTRY_T = 'United Kingdom'
+                AND RCA.SALE_DATE >= DATEADD(year, -3, CURRENT_DATE)
+            GROUP BY "Year"
+        )
+        SELECT
+            "Year",
+            CBRE_Market_Share / "Total_Market_Share" * 100 AS "market_share_percent",
+            CBRE_Market_Share,
+            "Total_Market_Share" AS "Total_Market_Share_in_USD"
+        FROM
+            MarketShareEurope
+        WHERE CBRE_Market_Share IS NOT NULL
+        ORDER BY "Year";
+
+  - Example-10:
+      User_Input: |
+         What country in Europe does CBRE have the lowest market share where sales in the last 5 years are over $250M annually?
+      AI_Response: |
+        WITH MarketShareEurope AS (
+            SELECT
+                EXTRACT(YEAR FROM RCA.SALE_DATE) AS "Year",
+                RCA.COUNTRY_T AS "Country",
+                SUM(MS.TOTALMARKETSHARE) AS "Total_Market_Share",
+                SUM(CASE WHEN MS.BROKERAGEFIRM = 'CBRE' THEN MS.TOTALMARKETSHARE END) AS CBRE_Market_Share
+            FROM 
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.RCA_WITH_CBRE_GEOS AS RCA
+            JOIN 
+                PROD_SIGMA_LOG_FILE_DB.SIGMA_LOG.MARKET_SHARE_FROM_RCA AS MS
+                ON RCA.PROPERTY_ID = MS.PROPERTY_ID
+            WHERE
+                RCA.CONTINENT_TX = 'Europe'
+                AND RCA.SALE_DATE >= DATEADD(year, -5, CURRENT_DATE)
+            GROUP BY "Year", "Country"
+        )
+        SELECT
+            "Country",
+            SUM(CBRE_Market_Share) / SUM("Total_Market_Share") * 100 AS "market_share_percent",
+            AVG("Total_Market_Share") AS "Annual average"
+        FROM
+            MarketShareEurope
+        WHERE CBRE_Market_Share IS NOT NULL
+        GROUP BY "Country"
+        HAVING AVG("Total_Market_Share") >= 250000000
+        ORDER BY "Annual average";

@@ -1,0 +1,32 @@
+schema:
+  Table_Schema:
+    NOTE: "THIS IS SOLELY FOR INTERNAL COMPANY RESEARCH AND EXPERIMENTATION PURPOSE ONLY."
+    Columns:
+      - Column1: 
+            Name: PROPERTY_ID
+            Description: This column is a unique ID for the land parcel/building - a building can be sold many times, so this may be repeated. Use the distinct PROPERTY_ID column to calculate the number of transactions."
+            Data_Type: VARCHAR(16777216)
+
+      - Column2:  
+            Name: BROKERAGEFIRM
+            Description: The name of the real estate brokerage firm representing the buyer or seller in transactions. This identifies the entity that facilitates the buying or selling process.
+                        - Also referred to as "Broker Company", "Representative", "Broker".
+            Data_Type: VARCHAR(16777216)
+      - Column3: 
+            Name: BUYERMARKETSHARE
+            Description: "The total monetary value of real estate transactions where buyers were represented by a specific brokerage firm. Do consider this column when the question is about buyer broker Sales Volume (AKA Transaction volume, deal volume, total consideration)."
+            Data_Type: FLOAT
+
+      - Column4:
+          Name: SELLERMARKETSHARE
+          Description: "The total monetary value of real estate transactions where sellers were represented by a specific brokerage firm. This figure reflects the aggregate amount of transactions completed by that firm on behalf of sellers in the market during a specific time period. Do consider this column when the question is about seller broker Sales Volume (AKA Transaction volume, deal volume, total consideration, Seller Wallet Share, Listing Market Share)."
+          Data_Type: FLOAT
+
+      - Column5: 
+          Name: TOTALMARKETSHARE
+          Description: 
+            The total (summed) monetary value of real estate transactions attributed to a specific brokerage (from the MARKET_SHARE_FROM_RCA table).
+            -Also referred to as "Market Share", "Ranking", "Percent of Market", "Share of Wallet", "Overall Market Share", "Total Market Share".
+            -Use TOTALMARKETSHARE when comparing multiple firms; it prevents double-counting deals that have more than one broker.
+          Data_Type: FLOAT
+

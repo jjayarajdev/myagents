@@ -1,0 +1,69 @@
+Examples:
+  - Example-1:
+      Input: |
+        Input: Factors contributed to the decline in market share for CBRE
+    
+      Reasoning: |
+
+      Correct_Behaviour: |
+        **Correct Behavior:** Create **multiple tasks**, as the question is to identify the factors.  
+        Task-1: Calculating number of Transactions: Evaluate the total number of transactions processed over a specific period. This metric helps in understanding the volume of business activity and customer engagement.
+        Task-2: Calculating the Transaction Value: Assess the total value of transactions processed. This metric provides insight into the revenue generated and the average transaction size.
+      
+      Incorrect_Behaviour: |
+        **Incorrect Behavior:** Combine into a single task or create multiple overlapping tasks.
+    
+  - Example-2:
+      Input: |
+        Input: Can you provide an analysis of how CBRE's growth in France has evolved over the past three years? Please include details on transaction volume, transaction value, and product types for each broker. Additionally, compare this data with key competitors to explain the changes in growth.”
+      
+      Reasoning: |
+
+      Correct_Behaviour: |
+        **Correct Behavior:** Create **multiple tasks**, as the question is to identify the factors.
+          
+          Task-1 :What has been the overall trend in CBRE's growth in France over the past three years?
+          Task-2: What was CBRE's transaction volume in France for each of the past three years?
+          Task-3: What was the total transaction value for CBRE in France for each of the past three years?
+          Task-4: What types of products did CBRE focus on in France over the past three years?
+          Task-5: Who are CBRE's key competitors in France?
+          Task-6: How did the transaction volume and value of these competitors compare to CBRE's over the past three years?
+          Task-7: What economic or market factors influenced CBRE's growth in France over the past three years?
+      
+      Incorrect_Behavior: |
+        **Incorrect Behavior:** Combine into a single task or create multiple overlapping tasks.
+  
+  - Example-3:
+      Input: |
+        Input:Can you provide an analysis of how the average value of real estate deals brokered by CBRE in the United States has changed over the past five years? Please include any significant trends, factors influencing these changes, and relevant data points
+
+      Reasoning: |
+        The input  is seeking a comprehensive understanding of changes in the average value of real estate deals over a specific time frame.
+        This request can be addressed in a single task as it encompasses a singular focus on trends and changes in average values, rather than requiring multiple queries or data points.
+
+      Correct_Behaviour: |
+        **Correct Behavior: ** Create **Single task **
+        Task1:How has the average value of real estate deals brokered by CBRE in the United States changed over the past five years?
+
+      Incorrect_Behaviour: |
+        **Incorrect Behavior:** Creating multiple overlapping tasks
+          Task1:How has the average value of real estate deals brokered by CBRE in the United States changed over the past five years?
+          Task2: What are the significant trends in the average value of real estate deals brokered by CBRE in the United States over the past five years?
+          Task3:Can you provide relevant data points on the average value of real estate deals brokered by CBRE in the United States over the past five years?
+          Task4:How has the average value of real estate deals brokered by CBRE in the United States changed over the past five years?
+
+  - Example-4:
+      Input: |
+        **Input:** In markets where CBRE has seen a decline, which brokerage companies have gained market share in 2023?
+
+      Reasoning: |
+        **Reasoning:** The input is seeking to understand two distinct components: the markets where CBRE has experienced a decline and the brokerage companies that have gained market share in those specific markets. This request requires splitting into two tasks to provide a clear and comprehensive analysis.
+
+      Correct_Behaviour: |
+        **Correct Behavior:** Create **Two Tasks**
+          - **Task 1:** Identify the specific markets where CBRE has experienced a decline in 2023.
+          - **Task 2:** Identify the brokerage companies that have gained market share in the markets identified in Task 1.
+
+      Incorrect_Behaviour: |
+        **Incorrect Behavior:** Creating a single overlapping task
+          - **Task 1:** In markets where CBRE has seen a decline, which brokerage companies have gained market share in 2023?

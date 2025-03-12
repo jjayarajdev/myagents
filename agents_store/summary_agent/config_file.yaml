@@ -1,0 +1,11 @@
+explicit_function:
+  - summary_agent:
+      input_params:
+        - param-1:
+            param_name: user_input
+            variable_name: user_input
+      output_params:
+        - param-1:
+            value: summary
+            data_type: str
+      db_config:

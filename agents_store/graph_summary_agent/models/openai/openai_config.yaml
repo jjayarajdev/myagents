@@ -1,0 +1,14 @@
+# Configuration for the OpenAI model used in the application.
+model:
+   # The name of the model provider.
+   name: Azureopenai
+   
+   # The specific deployment name of the model.
+   deployment_name: gpt4omni
+   
+   # The version of the model being used.
+   version: 2024-02-15-preview
+   
+   # The temperature setting for the model, which controls the randomness of the output.
+   # Lower values make the output more deterministic.
+   temperature: 0.1

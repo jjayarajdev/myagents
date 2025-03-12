@@ -1,0 +1,7 @@
+agents_required:
+  - name: generic_conversation_agent
+    enabled: true
+  - name: db_agent
+    enabled: true
+  - name: human_agent
+    enabled: true

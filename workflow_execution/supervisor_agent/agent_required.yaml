@@ -1,0 +1,4 @@
+agents_required: 
+  - generic_conversation_agent
+  - db_agent
+  - human_agent

@@ -1,0 +1,17 @@
+example_prompt: |
+  Consider the examples for reference in response generation
+Examples:
+  - Example-1:
+      Input: |
+        Input:  Which were the top 5 markets where CBRE had the highest market share in US in 2023?
+
+      Reasoning: |
+         Needs to consider the ['RCA_WITH_CBRE_GEOS','MARKET_SHARE_FROM_RCA']  tables as 'RCA_WITH_CBRE_GEOS' table has Market/location data of various properties at various granular levels and  for the values of MARKETSHARE of various BROKERAGEFIRM need to consider 'MARKET_SHARE_FROM_RCA' So considering both the tables is correct behaviour 
+        
+
+
+      Correct_Behaviour: |
+        **Correct Behavior:** ['RCA_WITH_CBRE_GEOS','MARKET_SHARE_FROM_RCA']  
+
+      Incorrect_Behaviour: |
+        **Incorrect Behavior:** ['MARKET_SHARE_FROM_RCA']

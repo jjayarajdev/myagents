@@ -1,0 +1,28 @@
+Business_instructions:
+  - Instruction-1: |
+      ---
+      • Baseline – Sales Volume:
+      - If the user is talking about how much a single broker transacted (no comparison to other brokers), use the "SALE_PRICE" column from the SIGMA_LOG.RCA_WITH_CBRE_GEOS table.
+        This metric is also referred to as “Sales Volume,” “Total Consideration,” or “Transacted.”
+
+  - Instruction-2: |
+      **Default Time Period:**
+      - If the time period is not mentioned, always consider the previous year using the **SALE_DATE** column.
+
+      **Dollar Amount Formatting:**
+      - Format dollar amounts instead of providing the entire value.
+
+  - Instruction-3: |
+      **Key Operations:**
+      - Identify properties associated with the brokerage firm first like 'CBRE' from the MARKET_SHARE_FROM_RCA table and do the Operations.
+
+Notes:
+  - special_notes: |
+      - **Avoid Self-Reference**: Do not reference an alias in the same level of the query where it is defined. Instead, use the original column name. This prevents errors related to undefined identifiers.
+
+  - additional_notes: |
+      - **Database and Table Reference**: Queries are to be run on the **PROD_SIGMA_LOG_FILE_DB** database and the **RCA_WITH_CBRE_GEOS** table, using the **SIGMA_LOG** schema.
+      - **Consistent Formatting**: Ensure that all references to columns and tables are consistently and correctly formatted according to Snowflake syntax and best practices.
+      - **Previous Year Filter**: Include the previous year filter when the time period is not mentioned in the user query (e.g., `EXTRACT(YEAR FROM SALE_DATE) = EXTRACT(YEAR FROM CURRENT_DATE) - 1`).
+
+      ---

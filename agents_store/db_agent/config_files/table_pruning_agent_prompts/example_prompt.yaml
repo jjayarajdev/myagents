@@ -1,0 +1,30 @@
+example_prompt: |
+  Consider the examples for reference for table pruning. 
+
+Examples:
+  - Example-1:
+      Input: |
+       Which were the top 5 markets where CBRE had the highest market share in the US in 2023?
+
+      Reasoning: |
+        - From RCA_WITH_CBRE_GEOS, I'd extract US market/location data and property information for 2023
+       
+        - From MARKET_SHARE_FROM_RCA, I'd get the market share percentages for CBRE as a brokerage firm
+       
+        - Join these tables to connect market share data with specific US markets
+       
+        - Group by market/location and calculate CBRE's market share in each
+       
+        - Rank the markets based on CBRE's market share percentage
+       
+        - Select the top 5 markets with highest CBRE market share
+       
+ 
+      Correct_Behaviour: |
+        ['RCA_WITH_CBRE_GEOS', 'MARKET_SHARE_FROM_RCA']  
+ 
+      Incorrect_Behaviour: |
+        ['MARKET_SHARE_FROM_RCA'] or [RCA_WITH_CBRE_GEOS]
+     
+      Output Behaviour: |
+        ['RCA_WITH_CBRE_GEOS', 'MARKET_SHARE_FROM_RCA']

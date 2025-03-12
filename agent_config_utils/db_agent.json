@@ -1,0 +1,77 @@
+{
+  "supervisor_db_config": {
+    "db_config":""
+  },
+    "table_pruning_agent": {
+    "system_prompt": 
+    {
+    "Tables": {
+        "Table_details": [
+            {
+            "Table-name": "",
+            "Description": ""
+            },
+            {
+            "Table-name": "",
+            "Description": ""
+            }
+         ]
+     },
+    "Note": "Do consider the description of the table for identifying the correct table for the user query not the given table name."
+         },
+    "example_prompt":
+         {
+            "Examples": [
+              {
+                "Example-1": {
+                  "Input": "",
+                  "Reasoning": "",
+                  "Correct_Behaviour": "",
+                  "Incorrect_Behaviour": "",
+                  "Output Behaviour": ""
+                }
+              }
+            ]
+          }
+        
+        
+        },
+    "db_query_agent":{
+        "table":[
+            {
+                "name":"",
+                "system_prompt":{
+                    "Business_instructions":[
+                        {
+                            "Instruction1":"",
+                            "Instruction2":""
+                        }
+                    ],
+                    "Notes":{
+                        "additional_notes": " "
+                    }
+                        
+                },
+                "example_prompt": [
+                    {
+                      "Example1": {
+                        "User_Input": "",
+                        "Reasoning": "",
+                        "AI_Response": ""
+                      }
+                    }
+                  ],
+                "schema":[
+                    {
+                        "column_name":"",
+                        "data_type":"",
+                        "description":""
+                    }
+                ]
+
+            }
+        ]
+        }
+    }
+  
+  

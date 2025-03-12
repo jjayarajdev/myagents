@@ -1,0 +1,94 @@
+functions:
+  - generic_conversation_agent:
+      description: |
+        - **generic_conversation_agent(user_input)**  
+        - *Purpose:* Handles web-related queries.
+      parameters: |
+        - *Parameters Required:*  
+          - `user_input`: The user's input text.
+      db_config:
+
+  - db_agent:
+      description: |
+        - **db_agent(user_input)**  
+        - Retrieves data from a Snowflake database, including all database-related tasks such as querying past interactions, records, or any other data not explicitly related to Snowflake access.  
+      parameters: |
+        - *Parameters Required:*
+          - `user_input`: The user's input, used to query the database. 
+      output_params:
+        - param-1:
+            value: ai_response
+            data_type: str
+      db_config: snowflake_agent
+    
+  - human_agent:
+      description: |
+        - **human_agent(user_input, conversation_history, user_details)**  
+        - Handles ambiguous questions or requests that other agents cannot process. This function acts as a fallback for complex or unclear inputs that require human intervention.  
+      parameters: |
+        - *Parameters Required:*  
+          - `user_input`: The raw user input, passed without modification.  
+          - `conversation_history`: The history of the conversation for context.  
+          - `user_details`: Full available information about the user. 
+      output_params:
+        - param-1:
+            value: human_agent
+            data_type: str
+      db_config:
+
+# # Need to write the explicit functions in the order of exectuion
+
+  # - graph_summary_agent:
+  #     description: |
+  #       **graph_summary_agent(user_input,other_agents_response)
+  #       You are **Graph and Summary Agent**, an LLM agent designed to analyze user queries and determine whether to answer them using:  
+  #        A graph (via a specific graph function),  and summary or comprehensive analysis of other agents' outputs, 
+        
+
+  #     parameters: |
+  #       - *Parameters Required:*
+  #         - `user_input`: The raw user input, passed without modification. 
+  #         - 'other_agents_response': The response of the previous output sent to other_agents_response  
+
+  #     output_params:
+  #       - param-1:
+  #           value: function_name
+  #           data_type: str
+  #       - param-2:
+  #           value: parameters
+  #           data_type: dict
+  #       - param-3:
+  #           value: summary
+  #           data_type: str
+  #     db_config:
+
+explicit_functions:
+#   - graph_summary_agent:
+#       input_params:
+#         - param-1:
+#             param_name: user_input
+#             variable_name: user_input
+#         - param-2:
+#             param_name: other_agents_response
+#             variable_name: task_outputs
+#       output_params:
+#         - param-1:
+#             value: function_name
+#             data_type: str
+#         - param-2:
+#             value: parameters
+#             data_type: dict
+#         - param-3:
+#             value: summary
+#             data_type: str
+#       depends_on:
+  # - summary_agent:
+  #     input_params:
+  #       - param-1:
+  #           param_name: user_input
+  #           variable_name: user_input
+  #     output_params:
+  #       - param-1:
+  #           value: summary
+  #           data_type: str
+  #     depends_on: True

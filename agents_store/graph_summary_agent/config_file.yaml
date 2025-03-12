@@ -1,0 +1,20 @@
+explicit_function:
+  - graph_summary_agent:
+      input_params:
+        - param-1:
+            param_name: user_input
+            variable_name: user_input
+        - param-2:
+            param_name: other_agents_response
+            variable_name: task_outputs
+      output_params:
+        - param-1:
+            value: function_name
+            data_type: str
+        - param-2:
+            value: parameters
+            data_type: dict
+        - param-3:
+            value: summary
+            data_type: str
+      db_config:

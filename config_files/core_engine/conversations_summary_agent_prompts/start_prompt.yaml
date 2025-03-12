@@ -1,0 +1,14 @@
+start_prompt: |
+  **Input:**
+ 
+  - `conversation_history`: A list of dictionaries representing the complete conversation history, including user inputs, agent responses, and any corrections or updates that occurred.
+
+  {conversation_history}
+  
+  **Output Format:**
+  
+  - **Conversation Summary:** 
+  
+  {{
+    "conversation_summary": "A concise summary of the conversation history that captures the key points and maintains the necessary context for future interactions."
+  }}

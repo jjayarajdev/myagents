@@ -1,0 +1,123 @@
+schema:
+  Table_Schema:
+    NOTE: "THIS IS SOLELY FOR INTERNAL COMPANY RESEARCH AND EXPERIMENTATION PURPOSE ONLY."
+    Columns:
+    - Column1: |
+        Name: PROPERTY_ID
+        Description: "This column is a unique ID for the land parcel/building - a building can be sold many times, so this may be repeated. Use the distinct PROPERTY_ID column to calculate the number of transactions."
+        Data_Type: VARCHAR(16777216)
+
+    - Column2: |
+        Name: SALE_PRICE
+        Description: "This column reflects the adjusted closing or contract price of the property (from the RCA_WITH_CBRE_GEOS table), expressed in US Dollars. Also referred to as 'Sales Volume,' 'Total Consideration,' or 'Transacted.' Use SALE_PRICE when the focus is on how much a broker transacted or participated in (i.e., overall volume). Format the value in millions or billions instead of the raw number for readability."
+        Data_Type: FLOAT
+
+    - Column3: |
+        Name: RCA_PROPERTY_TYPE
+        Description: "This column categorizes the property type by indicating its primary use. It contains values such as Apartment, Industrial, Office, Retail."
+        Data_Type: VARCHAR(16777216)
+
+    - Column4: |
+        Name: COUNTRY_T
+        Description: "This column specifies the country in which the property is located. It provides essential geographical context for the transaction."
+        Data_Type: VARCHAR(16777216)
+
+    - Column5: |
+        Name: CONTINENT_TX
+        Description: "This column specifies the continent in which the property is located. The CONTINENT_TX provides geographical context for the property, facilitating regional analysis and comparison across different markets."
+        Data_Type: VARCHAR(16777216)
+
+    - Column6: |
+        Name: MARKET_T
+        Description: "This column specifies the RCA-defined market in which the property is located. It categorizes properties based on whether they fall within a Central Business District (CBD) or outside of it."
+        Data_Type: VARCHAR(16777216)
+
+    - Column7: |
+        Name: STATE
+        Description: "This column specifies the state in which the property is located. It provides essential geographical context for the transaction."
+        Data_Type: VARCHAR(16777216)
+
+    - Column8: |
+        Name: CITY
+        Description: "This column specifies the city in which the property is located. The CITY provides essential geographical context for the transaction, allowing for analysis of market trends, property values, and buyer preferences within specific urban areas."
+        Data_Type: VARCHAR(16777216)
+
+    - Column9: |
+        Name: SALE_SIZE
+        Description: "The size of the property sold, often measured in square feet or acres, allowing for comparisons of property sizes in the market."
+        Data_Type: FLOAT
+
+    - Column10: |
+        Name: SALE_DATE
+        Description: "The date when the transaction was completed, essential for temporal analysis of market trends."
+        Data_Type: TIMESTAMP_LTZ(9)
+
+    - Column11: |
+        Name: BUYERNAME_1
+        Description: "This column identifies the primary buyer involved in the transaction, specifically the name of the company or entity purchasing the property."
+        Data_Type: VARCHAR(16777216)
+
+    - Column12: |
+        Name: SELLERNAME_1
+        Description: "This column identifies the primary seller involved in the transaction, specifically the name of the company or entity selling the property."
+        Data_Type: VARCHAR(16777216)
+
+    - Column13: |
+        Name: BLDG_NAME
+        Description: "This column identifies the property name at the time of sale."
+        Data_Type: VARCHAR(16777216)
+
+    - Column14: |
+        Name: ADDRESS
+        Description: "This column identifies the property address at the time of sale."
+        Data_Type: VARCHAR(16777216)
+
+    - Column15: |
+        Name: POST_CODE
+        Description: "This column specifies the postal code of the property, offering crucial geographical detail."
+        Data_Type: VARCHAR(16777216)
+
+    - Column16: |
+        Name: LMA_T
+        Description: "This column specifies the Local Market Area (LMA) in which the property is located."
+        Data_Type: VARCHAR(16777216)
+
+    - Column17: |
+        Name: GLOBAL_REGION_T
+        Description: "This column identifies the global regions, which categorizes the property into defined global regions."
+        Data_Type: VARCHAR(16777216)
+
+    - Column18: |
+        Name: GLOBAL_SUBREGION_T
+        Description: "This column identifies the subglobal regions, which further categorizes the property into more specific and detailed regions."
+        Data_Type: VARCHAR(16777216)
+
+    - Column19: |
+        Name: DIVISION_T
+        Description: "Represents specific divisions or sectors within the subregion."
+        Data_Type: VARCHAR(16777216)
+
+    - Column20: |
+        Name: REGION_T
+        Description: "Specifies a detailed geographic area or territory within a division."
+        Data_Type: VARCHAR(16777216)
+
+    - Column21: |
+        Name: MARKET_AREA_T
+        Description: "Represents the broader geographic market region where the data is being categorized."
+        Data_Type: VARCHAR(16777216)
+
+    - Column22: |
+        Name: SUBMARKET_T
+        Description: "Submarket is a smaller geographic area within a larger Local Market Area (LMA)."
+        Data_Type: VARCHAR(16777216)
+
+    - Column23: |
+        Name: DISTRICT_T
+        Description: "The district in which the property is located, useful for understanding local governance and market dynamics."
+        Data_Type: VARCHAR(16777216)
+
+    - Column24: |
+        Name: NEIGHBORHOOD_T
+        Description: "The neighborhood designation for the property, providing insights into local demographics and amenities."
+        Data_Type: VARCHAR(16777216)

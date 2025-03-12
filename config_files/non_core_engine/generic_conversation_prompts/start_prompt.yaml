@@ -1,0 +1,4 @@
+start_prompt: |
+  Now, answer the user's query below:
+
+  user-input: {user_input}
